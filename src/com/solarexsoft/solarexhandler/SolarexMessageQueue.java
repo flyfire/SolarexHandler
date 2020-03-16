@@ -22,8 +22,8 @@ public class SolarexMessageQueue {
     }
 
     public void enqueueMessage(SolarexMessage msg) {
+        lock.lock();
         try {
-            lock.lock();
             while (count == MAX_SIZE) {
                 alreadyFull.await();
             }
@@ -40,8 +40,8 @@ public class SolarexMessageQueue {
 
     public SolarexMessage next() {
         SolarexMessage msg = null;
+        lock.lock();
         try {
-            lock.lock();
             while (count == 0) {
                 alreadyEmpty.await();
             }
